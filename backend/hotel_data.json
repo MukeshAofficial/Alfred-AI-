@@ -1,0 +1,40 @@
+{
+  "hotel": {
+      "name": "Sea Breeze Beach House",
+      "services": ["Spa Treatments", "Housekeeping", "Room Service", "Airport Transfers", "Laundry"]
+  },
+  "restaurants": [
+      {
+          "name": "Azure Restaurant",
+          "cuisine": "Caribbean Fusion",
+          "menu": [
+              {"item": "Grilled Mahi Mahi", "price": "$25"},
+              {"item": "Jerk Chicken Tacos", "price": "$18"},
+              {"item": "Tropical Fruit Salad", "price": "$10"}
+          ]
+      },
+      {
+          "name": "Breeze Café",
+          "cuisine": "International",
+          "menu": [
+              {"item": "Club Sandwich", "price": "$14"},
+              {"item": "Iced Latte", "price": "$6"},
+              {"item": "Caesar Salad", "price": "$12"}
+          ]
+      }
+  ],
+  "attractions": [
+      {
+          "name": "Catamaran Cruises",
+          "description": "Sail to a secluded bay and swim with turtles.",
+          "distance": "6.7 miles",
+          "duration": "22 minutes"
+      },
+      {
+          "name": "Harrison’s Cave",
+          "description": "Underground tram ride through natural wonders.",
+          "distance": "12.5 miles",
+          "duration": "32 minutes"
+      }
+  ]
+}

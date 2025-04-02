@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .chat-bubble {
+            max-width: 70%;
+            margin: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+        }
+        .user-bubble {
+            background-color: #3b82f6;
+            color: white;
+            margin-left: auto;
+        }
+        .bot-bubble {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-lg flex flex-col h-[600px]">
+        <div class="bg-blue-600 text-white p-4 rounded-t-lg">
+            <h1 class="text-lg font-semibold">Hotel Chatbot</h1>
+            <p class="text-sm">Ask me about Sea Breeze Beach House!</p>
+        </div>
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto flex flex-col">
+            <div class="chat-bubble bot-bubble">
+                Hello! I'm your hotel concierge. How can I assist you today?
+            </div>
+        </div>
+        <div class="p-4 border-t">
+            <form id="chat-form" class="flex gap-2">
+                <input 
+                    type="text" 
+                    id="message-input" 
+                    class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Type your message..." 
+                    autocomplete="off"
+                >
+                <button 
+                    type="submit" 
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                    Send
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const messageInput = document.getElementById('message-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-bubble ${isUser ? 'user-bubble' : 'bot-bubble'}`;
+            // Replace **text** with <strong>text</strong> and preserve line breaks
+            const formattedContent = content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+            messageDiv.innerHTML = formattedContent;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            messageInput.value = '';
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message }),
+                });
+
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                addMessage(data.response);
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage('Sorry, something went wrong. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
