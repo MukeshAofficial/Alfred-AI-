@@ -25,6 +25,16 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 
+useEffect(() => {
+  const subscription = supabase
+    .channel('bookings')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bookings' }, (payload) =>
+      setBookings((prev) => [...prev, payload.new])
+    )
+    .subscribe();
+  return () => subscription.unsubscribe();
+}, []);
+
 interface Booking {
   id: string
   service: string

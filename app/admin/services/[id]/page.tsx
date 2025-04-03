@@ -22,6 +22,14 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 
+async function addService(formData) {
+  const { name, category, price, description } = formData;
+  const { error } = await supabase
+    .from('services')
+    .insert({ name, category, price, description });
+  if (error) throw error;
+}
+
 // Mock service data - in a real app, this would come from an API call
 const mockService = {
   id: "1",

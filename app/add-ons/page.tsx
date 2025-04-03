@@ -20,6 +20,21 @@ import {
 } from "@/components/ui/dialog"
 import Header from "@/components/header"
 import Navigation from "@/components/navigation"
+import { supabase } from '@/lib/supabase';
+
+export default function AddOnsPage() {
+  const [addOns, setAddOns] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchAddOns() {
+      const { data, error } = await supabase.from('services').select('*');
+      if (error) console.error(error);
+      else setAddOns(data);
+      setLoading(false);
+    }
+    fetchAddOns();
+  }, []);
 
 // Mock add-ons data
 const mockAddOns = [
